@@ -60,6 +60,14 @@ enum Commands {
         /// Overwrite existing skills without prompting
         #[arg(long)]
         force: bool,
+
+        /// Registry username (overrides Docker config and OCI_USERNAME env var)
+        #[arg(long)]
+        username: Option<String>,
+
+        /// Registry password (overrides Docker config and OCI_PASSWORD env var)
+        #[arg(long)]
+        password: Option<String>,
     },
 
     /// Publish skills to an OCI registry
@@ -78,6 +86,14 @@ enum Commands {
         /// Add custom annotation (can be repeated)
         #[arg(long, value_name = "KEY=VALUE")]
         annotation: Vec<String>,
+
+        /// Registry username (overrides Docker config and OCI_USERNAME env var)
+        #[arg(long)]
+        username: Option<String>,
+
+        /// Registry password (overrides Docker config and OCI_PASSWORD env var)
+        #[arg(long)]
+        password: Option<String>,
     },
 
     /// List installed skills
@@ -137,6 +153,14 @@ enum Commands {
         /// Output as JSON
         #[arg(long)]
         json: bool,
+
+        /// Registry username (overrides Docker config and OCI_USERNAME env var)
+        #[arg(long)]
+        username: Option<String>,
+
+        /// Registry password (overrides Docker config and OCI_PASSWORD env var)
+        #[arg(long)]
+        password: Option<String>,
     },
 
     /// Generate shell completions
@@ -176,6 +200,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             create_dirs,
             dry_run,
             force,
+            username,
+            password,
         } => {
             let scope = if project {
                 InstallScope::Project
@@ -188,6 +214,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 create_dirs,
                 dry_run,
                 force,
+                username,
+                password,
             };
 
             let reference = match OciReference::parse(&reference) {
@@ -216,10 +244,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             paths,
             dry_run,
             annotation,
+            username,
+            password,
         } => {
             let options = PublishOptions {
                 dry_run,
                 annotations: annotation,
+                username,
+                password,
             };
 
             let reference = match OciReference::parse(&reference) {
@@ -300,7 +332,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        Commands::Inspect { reference, json } => {
+        Commands::Inspect {
+            reference,
+            json,
+            username,
+            password,
+        } => {
             let reference = match OciReference::parse(&reference) {
                 Ok(r) => r,
                 Err(e) => {
@@ -311,7 +348,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let inspector = ArtifactInspector::new(oci.clone(), logger.clone());
 
-            if let Err(e) = inspector.inspect(&reference, json).await {
+            if let Err(e) = inspector.inspect(&reference, json, username, password).await {
                 logger.error(&format!("Inspect failed: {}", e));
                 std::process::exit(1);
             }

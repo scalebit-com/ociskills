@@ -78,7 +78,16 @@ impl Publisher {
 
         self.logger
             .info(&format!("Publishing to: {}", reference));
-        let digest = self.oci.push(reference, &config, &temp_dir).await?;
+        let digest = self
+            .oci
+            .push(
+                reference,
+                &config,
+                &temp_dir,
+                options.username.clone(),
+                options.password.clone(),
+            )
+            .await?;
 
         // Clean up temp directory
         if self.fs.exists(&temp_dir).await {

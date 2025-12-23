@@ -15,8 +15,10 @@ impl ArtifactInspector {
         &self,
         reference: &OciReference,
         json_output: bool,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<ArtifactConfig, OciSkillsError> {
-        let config = self.oci.inspect(reference).await?;
+        let config = self.oci.inspect(reference, username, password).await?;
 
         if json_output {
             println!("{}", serde_json::to_string_pretty(&config)?);

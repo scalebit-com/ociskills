@@ -121,6 +121,8 @@ pub struct InstallOptions {
     pub create_dirs: bool,
     pub dry_run: bool,
     pub force: bool,
+    pub username: Option<String>,
+    pub password: Option<String>,
 }
 
 /// Options for publish command
@@ -128,6 +130,8 @@ pub struct InstallOptions {
 pub struct PublishOptions {
     pub dry_run: bool,
     pub annotations: Vec<String>,
+    pub username: Option<String>,
+    pub password: Option<String>,
 }
 
 /// Environment variable names and defaults

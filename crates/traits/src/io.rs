@@ -28,6 +28,8 @@ pub trait OciClient: Send + Sync {
         &self,
         reference: &OciReference,
         extract_to: &Path,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<ArtifactConfig, OciSkillsError>;
 
     /// Pack directory contents and push as artifact
@@ -37,6 +39,8 @@ pub trait OciClient: Send + Sync {
         reference: &OciReference,
         config: &ArtifactConfig,
         skills_dir: &Path,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<String, OciSkillsError>;
 
     /// Inspect artifact metadata without downloading layers
@@ -44,6 +48,8 @@ pub trait OciClient: Send + Sync {
     async fn inspect(
         &self,
         reference: &OciReference,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<ArtifactConfig, OciSkillsError>;
 }
 

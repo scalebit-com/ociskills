@@ -66,3 +66,20 @@ pub fn get_registry_auth(registry: &str) -> RegistryAuth {
 
     RegistryAuth::Basic(username.to_string(), password.to_string())
 }
+
+/// Get registry auth with optional credential override
+/// If username and password are provided, use them
+/// Otherwise fall back to Docker config
+pub fn get_registry_auth_with_override(
+    registry: &str,
+    username: Option<String>,
+    password: Option<String>,
+) -> RegistryAuth {
+    // If both username and password provided, use them
+    if let (Some(u), Some(p)) = (username, password) {
+        return RegistryAuth::Basic(u, p);
+    }
+
+    // Otherwise fallback to existing Docker config logic
+    get_registry_auth(registry)
+}

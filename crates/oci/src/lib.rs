@@ -41,9 +41,15 @@ impl OciClient for OciClientImpl {
         &self,
         reference: &OciReference,
         extract_to: &Path,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<ArtifactConfig, OciSkillsError> {
         let oci_ref = self.to_oci_reference(reference)?;
-        let auth = auth::get_registry_auth(oci_ref.registry());
+        let auth = auth::get_registry_auth_with_override(
+            oci_ref.registry(),
+            username,
+            password,
+        );
 
         // 1. Pull image data
         let image_data = self
@@ -91,9 +97,15 @@ impl OciClient for OciClientImpl {
         reference: &OciReference,
         config: &ArtifactConfig,
         skills_dir: &Path,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<String, OciSkillsError> {
         let oci_ref = self.to_oci_reference(reference)?;
-        let _auth = auth::get_registry_auth(oci_ref.registry());
+        let _auth = auth::get_registry_auth_with_override(
+            oci_ref.registry(),
+            username,
+            password,
+        );
 
         // 1. Create tar.gz of skills_dir
         let tar_gz_data = packer::create_tar_gz(skills_dir)?;
@@ -149,9 +161,15 @@ impl OciClient for OciClientImpl {
     async fn inspect(
         &self,
         reference: &OciReference,
+        username: Option<String>,
+        password: Option<String>,
     ) -> Result<ArtifactConfig, OciSkillsError> {
         let oci_ref = self.to_oci_reference(reference)?;
-        let auth = auth::get_registry_auth(oci_ref.registry());
+        let auth = auth::get_registry_auth_with_override(
+            oci_ref.registry(),
+            username,
+            password,
+        );
 
         // 1. Pull manifest (lightweight)
         let (manifest, _digest) = self

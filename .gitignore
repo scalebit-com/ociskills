@@ -22,3 +22,9 @@ target
 
 # Plans directory
 plans/*
+
+# Integration test directories (timestamped)
+integration_tests_*/
+
+# Integration test environment
+integration-tests/.env

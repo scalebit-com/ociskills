@@ -56,7 +56,14 @@ impl Installer {
         if options.dry_run {
             self.logger
                 .info(&format!("Pulling artifact metadata: {}", reference));
-            let config = self.oci.inspect(reference).await?;
+            let config = self
+                .oci
+                .inspect(
+                    reference,
+                    options.username.clone(),
+                    options.password.clone(),
+                )
+                .await?;
             self.logger.info("Dry run - would install:");
             for skill in &config.skills {
                 self.logger
@@ -74,7 +81,15 @@ impl Installer {
             .join(format!("ociskills-{}", Uuid::new_v4()));
         self.fs.create_dir_all(&temp_dir).await?;
 
-        let config = self.oci.pull(reference, &temp_dir).await?;
+        let config = self
+            .oci
+            .pull(
+                reference,
+                &temp_dir,
+                options.username.clone(),
+                options.password.clone(),
+            )
+            .await?;
 
         // 5. Validate and install each skill
         let mut installed = Vec::new();
