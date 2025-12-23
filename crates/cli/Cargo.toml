@@ -1,0 +1,16 @@
+[package]
+name = "ociskills"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ociskills"
+path = "src/main.rs"
+
+[dependencies]
+core = { workspace = true }
+oci = { workspace = true }
+traits = { workspace = true }
+clap = { workspace = true }
+clap_complete = { workspace = true }
+tokio = { workspace = true }
