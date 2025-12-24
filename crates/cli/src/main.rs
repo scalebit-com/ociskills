@@ -1,6 +1,6 @@
 use clap::{CommandFactory, Parser, Subcommand};
 use clap_complete::Shell;
-use ociskills_core::{
+use core::{
     ArtifactInspector, ConsoleLogger, Installer, Publisher, RealEnvironment, RealFileSystem,
     SkillLister, SkillRemover, SkillValidator,
 };
