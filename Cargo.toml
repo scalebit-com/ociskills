@@ -49,4 +49,4 @@ uuid = { version = "1", features = ["v4"] }
 # Workspace crates
 traits = { path = "crates/traits" }
 oci = { path = "crates/oci" }
-core = { path = "crates/core" }
+ociskills-core = { path = "crates/core" }
